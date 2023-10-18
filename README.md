@@ -1,2 +1,2 @@
 # browser-bookmarks
-Handling of Browser Bookmarks
+Handling of Browser Bookmarks.
