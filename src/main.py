@@ -13,13 +13,21 @@ from docopt import docopt
 
 def main():
     # get optional input command line args #
+    print(__doc__)
     args = docopt(__doc__)
 
-    test_func()
+    func()
+    import sys
+    print(sys.argv[1:])
+    print(sys.argv)
+    print(args)
+    return args
 
-def test_func():
+def func():
     # do stuff #
     print(f"hello world")
+    print(f"hello world2")
+    print(f"hello world3")
 
 
 if __name__=="__main__":
