@@ -15,8 +15,11 @@ def main():
     # get optional input command line args #
     args = docopt(__doc__)
 
+    test_func()
+
+def test_func():
     # do stuff #
-    print(f"hello world, entered args are {args.values()}")
+    print(f"hello world")
 
 
 if __name__=="__main__":
