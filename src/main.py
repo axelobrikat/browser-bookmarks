@@ -1,33 +1,41 @@
 """
 Usage:
-    main.py [-v | --verbose | -vv | -q | --quiet | -qq ]
-
-Options:
-    -v --verbose              verbosity: print more text (-v or --verbose -> INFO, -vv -> DEBUG)
-    -q --quiet                verbosity: print less text (-q or --quiet -> ERROR, -qq -> CRITICAL)
-                                - default verbosity: only print WARNINGS, ERRORS and CRITICALS (level -> WARNING)
-
+    main.py
 """
-from docopt import docopt
+# """
+# Usage:
+#     main.py [-b | -o <file>]
 
+# Options:
+#     <>          show bookmarks of locally installed Chrome app
+#     -b          backup: create backup of current Chrome bookmarks in ./data
+#     -o <file>   overwrite: overwrite bookmarks of locally installed Chrome app with <file>
+# """
+# from docopt import docopt
+
+# from src.cli_args import Args
+from etc.paths import BOOKMARKS
+
+
+# def main():
+#     # get CLI input args #
+#     args = docopt(__doc__)
+
+#     func()
+#     import sys
+#     print(sys.argv[1:])
+#     print(sys.argv)
+#     print(args)
+#     return args
+
+# def func():
+#     # do stuff #
+#     print(f"hello world")
+#     print(f"hello world2")
+#     print(f"hello world3")
 
 def main():
-    # get optional input command line args #
-    print(__doc__)
-    args = docopt(__doc__)
-
-    func()
-    import sys
-    print(sys.argv[1:])
-    print(sys.argv)
-    print(args)
-    return args
-
-def func():
-    # do stuff #
-    print(f"hello world")
-    print(f"hello world2")
-    print(f"hello world3")
+    print(BOOKMARKS)
 
 
 if __name__=="__main__":
