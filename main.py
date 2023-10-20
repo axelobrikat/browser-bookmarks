@@ -14,7 +14,7 @@ Usage:
 # from docopt import docopt
 
 # from src.cli_args import Args
-from etc.paths import BOOKMARKS
+from src.etc.paths import BOOKMARKS
 
 
 # def main():
