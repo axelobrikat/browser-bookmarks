@@ -1,25 +1,25 @@
 """
 Usage:
-    main.py
+    main.py (-s | -b | -o <file>)
+
+Options:
+    -s          show bookmarks of locally installed Chrome app
+    -b          backup: create backup of current Chrome bookmarks in ./data
+    -o <file>   overwrite: overwrite bookmarks of locally installed Chrome app with <file>
 """
-# """
-# Usage:
-#     main.py [-b | -o <file>]
+from docopt import docopt
 
-# Options:
-#     <>          show bookmarks of locally installed Chrome app
-#     -b          backup: create backup of current Chrome bookmarks in ./data
-#     -o <file>   overwrite: overwrite bookmarks of locally installed Chrome app with <file>
-# """
-# from docopt import docopt
-
-# from src.cli_args import Args
+from src.cli_args import Args
 from src.etc.paths import BOOKMARKS
 
 
-# def main():
-#     # get CLI input args #
-#     args = docopt(__doc__)
+def main():
+    # get CLI input args #
+    args = docopt(__doc__)
+
+    # set CLI input args and check for validity #
+    Args.set_cli_args(args)
+    
 
 #     func()
 #     import sys
@@ -33,9 +33,6 @@ from src.etc.paths import BOOKMARKS
 #     print(f"hello world")
 #     print(f"hello world2")
 #     print(f"hello world3")
-
-def main():
-    print(BOOKMARKS)
 
 
 if __name__=="__main__":
