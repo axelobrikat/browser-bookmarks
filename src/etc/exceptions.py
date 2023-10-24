@@ -1,3 +1,5 @@
+import sys
+
 class Exc():
     """handle exceptions
     """
@@ -13,6 +15,17 @@ class Exc():
         """
         return (
             f"\n============"
+            f"\nError occured, Program end"
+            f"\n============"
             f"\n{msg}"
             f"\n============\n"
         )
+    
+    @classmethod
+    def exit(cls, msg: str):
+        """exit program, as error occured and print info
+
+        Args:
+            msg (str): error message
+        """
+        sys.exit(cls.format_exc_msg(msg))

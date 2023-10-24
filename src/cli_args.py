@@ -24,13 +24,19 @@ class Args():
     def check_cli_args(cls):
         """check for validity of content of CLi input
         """
-        cls.overwrite_path_exists()
+        if not cls.overwrite_path_exists():
+            Exc
 
     @classmethod
     def overwrite_path_exists(cls) -> bool:
         """check that path of file with Chrome Bookmarks exists
+
+        Returns:
+            bool: True, if file exists, otherwise False
         """
         if cls.overwrite and not cls.overwrite.exists():
-            raise FileNotFoundError(Exc.format_exc_msg(
-                f"Cannot find specified path '{cls.overwrite}'."
-            ))
+            # raise FileNotFoundError(Exc.format_exc_msg(
+            #     f"Cannot find specified path '{cls.overwrite}'."
+            # ))
+            return False
+        return True
