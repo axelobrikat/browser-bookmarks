@@ -16,9 +16,11 @@ from src.etc.paths import BOOKMARKS
 def main():
     # get CLI input args #
     args = docopt(__doc__)
+    print(args)
 
     # set CLI input args and check for validity #
     Args.set_cli_args(args)
+    Args.check_cli_args()
     
 
 #     func()
