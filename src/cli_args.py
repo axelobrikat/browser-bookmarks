@@ -1,7 +1,5 @@
 from pathlib import Path
 
-from src.etc.exceptions import Exc
-
 class Args():
     """handle cli input args
     """
@@ -23,9 +21,11 @@ class Args():
     @classmethod
     def check_cli_args(cls):
         """check for validity of content of CLi input
+        - if check fails, then return error message, otherwise empty string
         """
         if not cls.overwrite_path_exists():
-            Exc
+            return f"Cannot find specified path '{cls.overwrite}'."
+        return ''
 
     @classmethod
     def overwrite_path_exists(cls) -> bool:
@@ -35,8 +35,5 @@ class Args():
             bool: True, if file exists, otherwise False
         """
         if cls.overwrite and not cls.overwrite.exists():
-            # raise FileNotFoundError(Exc.format_exc_msg(
-            #     f"Cannot find specified path '{cls.overwrite}'."
-            # ))
             return False
         return True

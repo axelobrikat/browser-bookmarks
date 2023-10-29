@@ -10,6 +10,7 @@ Options:
 from docopt import docopt
 
 from src.cli_args import Args
+from src.etc.exceptions import Exc
 from src.etc.paths import BOOKMARKS
 
 
@@ -20,7 +21,10 @@ def main():
 
     # set CLI input args and check for validity #
     Args.set_cli_args(args)
-    Args.check_cli_args()
+    err_msg: str = Args.check_cli_args()
+    if err_msg:
+        Exc.exit(err_msg)
+    ## HIER ERST EXC WERFEN? #############
     
 
 #     func()
