@@ -27,21 +27,7 @@ def main():
     err_msg: str = Args.check_cli_args()
     if err_msg:
         Exc.exit(err_msg)
-    
-
-#     func()
-#     import sys
-#     print(sys.argv[1:])
-#     print(sys.argv)
-#     print(args)
-#     return args
-
-# def func():
-#     # do stuff #
-#     print(f"hello world")
-#     print(f"hello world2")
-#     print(f"hello world3")
 
 
 if __name__=="__main__":
-    main()
+    main() # pragma: no cover

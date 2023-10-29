@@ -1,3 +1,4 @@
+import docopt
 from pytest_mock import MockerFixture
 from unittest.mock import MagicMock
 import sys
@@ -8,12 +9,12 @@ from src.cli_args import Args
 from src.etc.exceptions import Exc
 
 
+__doc__ = main.__doc__
 
-class TestMainScript():
-    """test main.py
-    """
-    __doc__ = main.__doc__
-    
+
+class TestMainValidDocopt():
+    """test main.py with invalid cli input args
+    """    
     @pytest.fixture(autouse=True)
     def init(self, mocker: MockerFixture) -> None:
         self.set_cli_args: MagicMock = mocker.patch.object(
@@ -28,6 +29,11 @@ class TestMainScript():
             Exc,
             "exit",
         )
+        self.exp_args: dict[str, bool|None] = {
+            '-s': False,
+            '-b': False,
+            '-o': None,            
+        }
 
     def reset_mocks(self):
         """reset mocked variables
@@ -39,63 +45,99 @@ class TestMainScript():
         ]:
             mock.reset_mock()
 
-    def test_main_valid_docopt(self):
+    def main_test_cases_valid_docopt(
+            self,
+            sys_argv: str,
+            return_val: str|bool = "",
+            exit_called: bool = False,
+        ):
+        """test cases for testing main() with valid docopt cli args
 
-        # test case 1: cli input = "-s" #
-        sys.argv = r'.\src\main.py -s'.split(' ')
-        self.check_cli_args.return_value = ""
-        exp_args: dict[str, bool|None] = {
+        Args:
+            sys_argv (str): sys.argv cli input args
+            return_val (str | bool, optional): return value of mocked func Args.check_cli_args. Defaults to "".
+            exit_called (bool, optional): should have function Exc.exit() been called. Defaults to False.
+        """
+        # arrange #
+        sys.argv = sys_argv.split(' ')
+        self.check_cli_args.return_value = return_val
+
+        # act #
+        main()
+
+        # arrange #
+        self.set_cli_args.assert_called_once_with(self.exp_args)
+        self.check_cli_args.assert_called_once()
+        if exit_called:
+            self.exit.assert_called
+        else:
+            self.exit.assert_not_called()
+
+        # tearDown #
+        sys.argv = r'.\src\main.py'
+        self.reset_mocks()
+
+    def test_main_valid_docopt_s(self):
+        """test main with cli input = "-s"
+        """
+        self.exp_args = {
             '-s': True,
             '-b': False,
             '-o': None,
         }
-        main()
-        self.set_cli_args.assert_called_once_with(exp_args)
-        self.check_cli_args.assert_called_once()
-        self.exit.assert_not_called()
+        self.main_test_cases_valid_docopt(r'.\src\main.py -s')
 
+    def test_main_valid_docopt_b(self):
+        """test main with cli input = "-b"
+        """                
         # test case 2: cli input = "-b" #
-        self.reset_mocks()
-        sys.argv = r'.\src\main.py -b'.split(' ')
-        self.check_cli_args.return_value = ""
-        exp_args: dict[str, bool|None] = {
+        self.exp_args: dict[str, bool|None] = {
             '-s': False,
             '-b': True,
             '-o': None,
         }
-        main()
-        self.set_cli_args.assert_called_once_with(exp_args)
-        self.check_cli_args.assert_called_once()
-        self.exit.assert_not_called()
+        self.main_test_cases_valid_docopt(r'.\src\main.py -b')
 
-        # test case 3: cli input = "-s /correct/dummy/path" #
-        self.reset_mocks()
-        sys.argv = r'.\src\main.py -o /correct/dummy/path'.split(' ')
-        self.check_cli_args.return_value = ""
-        exp_args: dict[str, bool|None] = {
+    def test_main_valid_docopt_o_correct(self):
+        """test main with cli input = "-o /correct/dummy/path"
+        """
+        self.exp_args: dict[str, bool|None] = {
             '-s': False,
             '-b': False,
             '-o': '/correct/dummy/path',
         }
-        main()
-        self.set_cli_args.assert_called_once_with(exp_args)
-        self.check_cli_args.assert_called_once()
-        self.exit.assert_not_called()
+        self.main_test_cases_valid_docopt(r'.\src\main.py -o /correct/dummy/path')
 
-        # test case 4: cli input = "-s /incorrect/dummy/path" #
-        self.reset_mocks()
-        sys.argv = r'.\src\main.py -o /incorrect/dummy/path'.split(' ')
-        self.check_cli_args.return_value = "error message"
-        exp_args: dict[str, bool|None] = {
+    def test_main_valid_docopt_o_incorrect(self):
+        """test main with cli input = "-s /incorrect/dummy/path"
+        """
+        self.exp_args: dict[str, bool|None] = {
             '-s': False,
             '-b': False,
             '-o': '/incorrect/dummy/path',
         }
-        main()
-        self.set_cli_args.assert_called_once_with(exp_args)
-        self.check_cli_args.assert_called_once()
-        self.exit.assert_called_once_with("error message")
+        self.main_test_cases_valid_docopt(r'.\src\main.py -o /incorrect/dummy/path', "error_message", True)
 
+
+class TestMainInvalidDocopt():
+    """test main.py with invalid cli input args
+    """
+    def test_main_invalid_docopt(self):
+        """test that docopt raises an error when cli input is incorrect
+        """
+        for argv in [
+            r'.\src\main.py',
+            r'.\src\main.py -o',
+            # r'.\src\main.py -o ', # not testable with .split(" ")
+            # r'.\src\main.py -o ""', # not testable with .split(" ")
+            r'.\src\main.py -b /dummy/path',
+            r'.\src\main.py -s /dummy/path',
+            r'.\src\main.py -a',
+            r'.\src\main.py -v',
+        ]:
+            sys.argv = argv.split(' ')
+            with pytest.raises(docopt.DocoptExit):
+                main()
 
 
 # def test_funcc(capsys: CaptureFixture):
