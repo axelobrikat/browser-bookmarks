@@ -15,16 +15,18 @@ from src.etc.paths import BOOKMARKS
 
 
 def main():
+    """
+    - get and process CLI input args
+    - and start program
+    """
     # get CLI input args #
     args = docopt(__doc__)
-    print(args)
 
     # set CLI input args and check for validity #
     Args.set_cli_args(args)
     err_msg: str = Args.check_cli_args()
     if err_msg:
         Exc.exit(err_msg)
-    ## HIER ERST EXC WERFEN? #############
     
 
 #     func()
