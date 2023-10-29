@@ -12,6 +12,7 @@ from docopt import docopt
 from src.cli_args import Args
 from src.etc.exceptions import Exc
 from src.etc.paths import BOOKMARKS
+from src.orchestrate import Orchestrator
 
 
 def main():
@@ -27,6 +28,9 @@ def main():
     err_msg: str = Args.check_cli_args()
     if err_msg:
         Exc.exit(err_msg)
+
+    # orchestrate modes #
+    Orchestrator.orchestrate_modes()
 
 
 if __name__=="__main__":

@@ -1,19 +1,20 @@
 import docopt
-from pytest_mock import MockerFixture
-from unittest.mock import MagicMock
 import sys
 import pytest
+from pytest_mock import MockerFixture
+from unittest.mock import MagicMock
 
 from main import main
 from src.cli_args import Args
 from src.etc.exceptions import Exc
+from src.orchestrate import Orchestrator
 
 
 __doc__ = main.__doc__
 
 
 class TestMainValidDocopt():
-    """test main.py with invalid cli input args
+    """test main.py with valid cli input args
     """    
     @pytest.fixture(autouse=True)
     def init(self, mocker: MockerFixture) -> None:
@@ -28,6 +29,10 @@ class TestMainValidDocopt():
         self.exit: MagicMock = mocker.patch.object(
             Exc,
             "exit",
+        )
+        self.orchestrate_modes: MagicMock = mocker.patch.object(
+            Orchestrator,
+            "orchestrate_modes",
         )
         self.exp_args: dict[str, bool|None] = {
             '-s': False,
@@ -69,9 +74,10 @@ class TestMainValidDocopt():
         self.set_cli_args.assert_called_once_with(self.exp_args)
         self.check_cli_args.assert_called_once()
         if exit_called:
-            self.exit.assert_called
+            self.exit.assert_called()
         else:
             self.exit.assert_not_called()
+            self.orchestrate_modes.assert_called_once()
 
         # tearDown #
         sys.argv = r'.\src\main.py'
