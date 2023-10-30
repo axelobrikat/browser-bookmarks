@@ -11,7 +11,6 @@ from docopt import docopt
 
 from src.cli_args import Args
 from src.etc.exceptions import Exc
-from src.etc.paths import BOOKMARKS
 from src.orchestrate import Orchestrator
 
 
