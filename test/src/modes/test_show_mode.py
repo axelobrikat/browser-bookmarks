@@ -1,31 +1,13 @@
 from pytest_mock import MockerFixture
 from unittest.mock import MagicMock, patch, Mock
+import unittest
 import pytest
 from pathlib import Path
-import os
 
-from src.etc.paths import ROOT, BOOKMARKS
-from src.etc import paths
-from src.bib import Bib
+from src.etc.paths import ROOT
+from src.modes.show_mode import ShowMode
+from src.modes import show_mode
 
-
-@pytest.fixture(autouse=True)
-def mock_bookmarks(mocker: MockerFixture):
-    # pachted_dict: dict[str, str] = {
-    #     "BOOKMARKS": Path(ROOT, "test", "testdata", "231030_Bookmarks"),
-    # }
-    # mocker.patch.dict(
-    #     paths.__dict__,
-    #     return_value=Path(ROOT, "test", "testdata", "231030_Bookmarks")
-    # )
-    paths.__dict__["BOOKMARKS"] = Path(ROOT, "test", "testdata", "231030_Bookmarks")
-    # bookmarks.return_value = Path(
-    #     ROOT, "test", "testdata", "231030_Bookmarks"
-    # )
-    
-@pytest.fixture
-def get_bib() -> Bib:
-    return Bib()
 
 @pytest.fixture
 def mock_bm_data() -> dict[str, dict|str|int]:
@@ -116,13 +98,10 @@ def mock_bm_data() -> dict[str, dict|str|int]:
       }
 
 
-def test_load_bookmark_file(get_bib: Bib):
-   # with patch.object(paths, "BOOKMARKS", Path(ROOT, "test", "testdata", "231030_Bookmarks")):
-      with patch("src.bib.BOOKMARKS", Path(ROOT, "test", "testdata", "231030_Bookmarks")):
-         bib = Bib()
-         bib.load_bookmark_file()
-    # MagicMock.assert_called_once()
+class TestShowMode(unittest.TestCase):
+   def setUp(self) -> None:
+      self.show_modes: ShowMode = ShowMode()
 
-def test_get_bookmark_bar(mock_bm_data: dict[str, dict|str|int]):
-    mock_bib.get_bookmark_bar()
-    print(mock_bib.bm_bar)
+   def test_load_bookmark_file(self):
+      with patch.object(show_mode, "BOOKMARKS", Path(ROOT, "test", "testdata", "231030_Bookmarks")):
+         self.show_modes.load_bookmark_file()

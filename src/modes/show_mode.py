@@ -1,13 +1,21 @@
 import json
 
+from src.modes.mode import Mode
 from src.etc.paths import BOOKMARKS
 from src.etc.exceptions import Exc
 
 
-class Bib():
+class ShowMode(Mode):
+    """show current browser bookmarks
+    """
     def __init__(self) -> None:
         self.bm_data: dict[str, dict|str|int] = {}
         self.bm_bar: dict[str, dict] = {}
+
+    def process_bookmarks(self):
+        """entry function when this mode is selected by user
+        """
+        pass
 
     def show_bookmarks(self):
         self.load_bookmark_file()
@@ -61,13 +69,3 @@ class Bib():
                 f"Cannot load bookmarks file {BOOKMARKS}"
                 f"\n{e}"
             )
-
-    def backup_bookmarks(self):
-        pass
-
-    def overwrite_bookmarks(self):
-        #TODO: for cheksum etc, see
-            # https://stackoverflow.com/questions/63105717/how-do-i-run-a-test-to-check-if-google-chrome-is-running-python
-            # https://stackoverflow.com/questions/11308603/logic-behind-creating-bookmark-checksum-in-google-chrome
-        pass
-
