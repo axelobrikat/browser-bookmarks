@@ -1,3 +1,4 @@
+import psutil
 from pathlib import Path
 
 class Args():
@@ -25,6 +26,8 @@ class Args():
         """
         if not cls.overwrite_path_exists():
             return f"Cannot find specified path '{cls.overwrite}'."
+        if cls.chrome_is_running() and cls.overwrite:
+            return f"Chrome is currently running. Make sure Chrome has been terminated."
         return ''
 
     @classmethod
@@ -37,3 +40,15 @@ class Args():
         if cls.overwrite and not cls.overwrite.exists():
             return False
         return True
+    
+    @classmethod
+    def chrome_is_running(cls):
+        """check whether chrome.exe is running
+
+        Returns:
+            bool: True, if chrome.exe runs, False if not
+        """        
+        for proc in psutil.process_iter(['name']):
+            if proc.info['name'] == "chrome.exe":
+                return True
+        return False

@@ -1,3 +1,4 @@
 docopt==0.6.2
 coverage==7.3.2
+psutil==5.9.6
 pytest==7.4.2
