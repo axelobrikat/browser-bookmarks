@@ -2,7 +2,8 @@ import pytest
 from pytest_mock import MockerFixture
 from pathlib import Path
 import os
-from unittest.mock import MagicMock
+import psutil
+from unittest.mock import MagicMock, patch
 
 from src.cli_args import Args
 
@@ -33,10 +34,25 @@ def mock_chrome_is_running(mocker: MockerFixture):
     Returns:
         MagicMock: mocked function
     """
-    return  mocker.patch.object(
+    return mocker.patch.object(
         Args,
         "chrome_is_running",
         return_value=False,
+    )
+
+@pytest.fixture
+def mock_process_iter(mocker: MockerFixture):
+    """mock function psutil.process_iter
+
+    Args:
+        mocker (MockerFixture): pytest MockerFixture
+
+    Returns:
+        MagicMock: mocked function psutil.process_iter
+    """
+    return mocker.patch.object(
+        psutil,
+        "process_iter",
     )
 
 
@@ -163,7 +179,17 @@ def test_overwrite_path_exists():
     Args.overwrite = Path(os.curdir)
     assert Args.overwrite_path_exists() == True
 
-def test_chrome_is_running():
+def test_chrome_is_running(mock_process_iter: MagicMock):
     """test checking that chrome_is_running
     """
-    print(Args.chrome_is_running())
+    proc = psutil.Process()
+    mock_process_iter.side_effect = lambda arg: {
+        proc
+    }
+    assert Args.chrome_is_running() == False
+    print(type(proc))
+    print(proc)
+
+def test_test():
+    Args.chrome_is_running()
+

@@ -47,8 +47,12 @@ class Args():
 
         Returns:
             bool: True, if chrome.exe runs, False if not
-        """        
+        """
         for proc in psutil.process_iter(['name']):
+            print(proc)
+            print(proc.info)
+            print(type(proc))
+            print(type(proc.info))
             if proc.info['name'] == "chrome.exe":
                 return True
         return False
