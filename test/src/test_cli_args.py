@@ -183,13 +183,14 @@ def test_chrome_is_running(mock_process_iter: MagicMock):
     """test checking that chrome_is_running
     """
     proc = psutil.Process()
+    proc.info = proc.as_dict()
     mock_process_iter.side_effect = lambda arg: {
         proc
     }
+
+    # test case 1: assume that chrome is not running #
     assert Args.chrome_is_running() == False
-    print(type(proc))
-    print(proc)
 
-def test_test():
-    Args.chrome_is_running()
-
+    # test case 2: assume that chrome is running #
+    proc.info["name"] = "chrome.exe"
+    assert Args.chrome_is_running() == True
