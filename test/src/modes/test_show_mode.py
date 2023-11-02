@@ -27,29 +27,29 @@ def mock_output_bookmarks(mocker: MockerFixture) -> MagicMock:
    )
 
 @pytest.fixture
-def mock_get_bookmark_bar(mocker: MockerFixture) -> MagicMock:
+def mock_save_bookmark_bar(mocker: MockerFixture) -> MagicMock:
    return mocker.patch.object(
       ShowMode,
-      "get_bookmark_bar",
+      "save_bookmark_bar",
    )
 
 def test_process_bookmarks(
       mock_load_bookmark_file: MagicMock,
       mock_output_bookmarks: MagicMock,
-      mock_get_bookmark_bar: MagicMock,
+      mock_save_bookmark_bar: MagicMock,
       ):
    """test function calls in process_bookmarks-function
 
    Args:
        mock_load_bookmark_file (MagicMock): mocked function
        mock_output_bookmarks (MagicMock): mocked function
-       mock_get_bookmark_bar (MagicMock): mocked function
+       mock_save_bookmark_bar (MagicMock): mocked function
    """
    sm = ShowMode()
    sm.process_bookmarks()
    mock_load_bookmark_file.assert_called_once()
    mock_output_bookmarks.assert_called_once()
-   mock_get_bookmark_bar.assert_called_once()
+   mock_save_bookmark_bar.assert_called_once()
 
 
 
@@ -287,18 +287,18 @@ class TestShowMode(unittest.TestCase):
    def setUp(self) -> None:
       self.show_modes: ShowMode = ShowMode()
 
-   def test_get_bookmark_bar_success(self):
-      """test getting of bookmark_bar, when loading BOOKMARKS files beforehand was successful
+   def test_save_bookmark_bar_success(self):
+      """test saving of bookmark_bar, when loading BOOKMARKS files beforehand was successful
       """
-      # test case 1: getting data successfully #
+      # test case 1: saving data successfully #
       self.show_modes.bm_data: dict = get_exp_bm_data_roots()
-      self.show_modes.get_bookmark_bar()
+      self.show_modes.save_bookmark_bar()
       self.assertDictEqual(
          self.show_modes.bm_bar,
          self.show_modes.bm_data["roots"]["bookmark_bar"]
       )
 
-      # test case 2: not getting data successfully #
+      # test case 2: not saving data successfully #
       self.show_modes.bm_data: dict = {}
       with pytest.raises(SystemExit):
-         self.show_modes.get_bookmark_bar()
+         self.show_modes.save_bookmark_bar()

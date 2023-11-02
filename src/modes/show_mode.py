@@ -3,6 +3,7 @@ import json
 from src.modes.mode import Mode
 from src.etc.paths import BOOKMARKS
 from src.etc.exceptions import Exc
+from src.bookmark_roots import Root
 
 
 class ShowMode(Mode):
@@ -11,12 +12,24 @@ class ShowMode(Mode):
     def __init__(self) -> None:
         self.bm_data: dict[str, dict|str|int] = {}
         self.bm_bar: dict[str, dict] = {}
+        self.roots: list[Root] = []
 
     def process_bookmarks(self) -> None:
         """entry function when this mode is selected by user
         """
         self.load_bookmark_file()
-        self.get_bookmark_bar()
+
+#####################
+# hier einhaken, neben bookmark bar gibt es noch mehr roots
+# ROOTS Klasse erstellen und hier durch so viele instanzen
+# ... anlegen, wie bookmarks file hergibt
+# danach durch iterieren und roots' children outputen
+#####################
+        # for root in self.bm_data["roots"]:
+        #     self.roots.append(Root(root))
+        # put this in -> self.save_bookmark_roots()
+
+        self.save_bookmark_bar()
         self.output_bookmarks()
 
     def load_bookmark_file(self) -> None:
@@ -31,8 +44,8 @@ class ShowMode(Mode):
                 f"\n{e}"
             )
 
-    def get_bookmark_bar(self) -> None:
-        """get bookmark_bar from read in BOOKMARK file
+    def save_bookmark_bar(self) -> None:
+        """save bookmark_bar from read in BOOKMARK file
         """
         try:
             self.bm_bar = self.bm_data["roots"]["bookmark_bar"]
@@ -51,7 +64,9 @@ class ShowMode(Mode):
         self.output_bm_bar_children()
 
     def output_head(self) -> None:
-        pass
+        """output head of bookmarks: bookmark_bar
+        """
+        print(self.bm_bar["name"])
 
     def parse_bm_bar_children(self) -> None:
         pass
