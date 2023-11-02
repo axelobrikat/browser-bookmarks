@@ -17,6 +17,7 @@ class ShowMode(Mode):
         """
         self.load_bookmark_file()
         self.get_bookmark_bar()
+        self.output_bookmarks()
 
     def load_bookmark_file(self):
         """read BOOKMARKS file and store content
@@ -41,6 +42,11 @@ class ShowMode(Mode):
                 f"\nMake sure you specified the correct file."
                 f"\n{e}"
             )
+
+    def output_bookmarks(self):
+        """output bookmarks to CLI
+        """
+        pass
 
 
 

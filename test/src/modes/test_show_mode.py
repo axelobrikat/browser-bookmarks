@@ -1,3 +1,6 @@
+"""
+Note, this test file presents different approaches for unit testing python files
+"""
 from pytest_mock import MockerFixture
 from unittest.mock import MagicMock, patch
 import unittest
@@ -7,7 +10,48 @@ from pathlib import Path
 from src.etc.paths import ROOT
 from src.modes.show_mode import ShowMode
 from src.modes import show_mode
-from src.etc.exceptions import Exc
+
+
+@pytest.fixture
+def mock_load_bookmark_file(mocker: MockerFixture) -> MagicMock:
+   return mocker.patch.object(
+      ShowMode,
+      "load_bookmark_file",
+   )
+
+@pytest.fixture
+def mock_output_bookmarks(mocker: MockerFixture) -> MagicMock:
+   return mocker.patch.object(
+      ShowMode,
+      "output_bookmarks",
+   )
+
+@pytest.fixture
+def mock_get_bookmark_bar(mocker: MockerFixture) -> MagicMock:
+   return mocker.patch.object(
+      ShowMode,
+      "get_bookmark_bar",
+   )
+
+def test_process_bookmarks(
+      mock_load_bookmark_file: MagicMock,
+      mock_output_bookmarks: MagicMock,
+      mock_get_bookmark_bar: MagicMock,
+      ):
+   """test function calls in process_bookmarks-function
+
+   Args:
+       mock_load_bookmark_file (MagicMock): mocked function
+       mock_output_bookmarks (MagicMock): mocked function
+       mock_get_bookmark_bar (MagicMock): mocked function
+   """
+   sm = ShowMode()
+   sm.process_bookmarks()
+
+   mock_load_bookmark_file.assert_called_once()
+   mock_output_bookmarks.assert_called_once()
+   mock_get_bookmark_bar.assert_called_once()
+
 
 
 def get_exp_bm_data_roots() -> dict[str, dict]:
@@ -195,6 +239,8 @@ class TestShowModePatchedBOOKMARKS(unittest.TestCase):
 
 class TestShowModeLoadFileFail(unittest.TestCase):
    """test show_mode.py with a not existing BOOKMARKS file leading to an error
+   - Note, this class, covering the fail state, could also be united with the ...
+     ... class, covering the success state, using patch.multiple
    """
    def setUp(self) -> None:
       self.show_modes: ShowMode = ShowMode()
