@@ -192,6 +192,7 @@ class TestShowModePatchedBOOKMARKS(unittest.TestCase):
          "version"] == 1
 
 
+
 class TestShowModeLoadFileFail(unittest.TestCase):
    """test show_mode.py with a not existing BOOKMARKS file leading to an error
    """

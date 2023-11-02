@@ -18,11 +18,21 @@ class ShowMode(Mode):
         self.load_bookmark_file()
         self.get_bookmark_bar()
 
-    def show_bookmarks(self):
-        self.print_bm_bar()
-        self.print_children(self.bm_bar["children"])
+    def load_bookmark_file(self):
+        """read BOOKMARKS file and store content
+        """
+        try: 
+            with open(BOOKMARKS, "r", encoding='utf-8') as f:
+                self.bm_data = json.load(f)
+        except Exception as e:
+            Exc.exit(
+                f"Cannot load bookmarks file {BOOKMARKS}"
+                f"\n{e}"
+            )
 
     def get_bookmark_bar(self):
+        """get bookmark_bar from read in BOOKMARK file
+        """
         try:
             self.bm_bar = self.bm_data["roots"]["bookmark_bar"]
         except Exception as e:
@@ -31,6 +41,12 @@ class ShowMode(Mode):
                 f"\nMake sure you specified the correct file."
                 f"\n{e}"
             )
+
+
+
+    def show_bookmarks(self):
+        self.print_bm_bar()
+        self.print_children(self.bm_bar["children"])
 
 
     def print_bm_bar(self):
@@ -56,15 +72,3 @@ class ShowMode(Mode):
 # roots
 # sync_metadata
 # version
-
-    def load_bookmark_file(self):
-        """read BOOKMARKS file and store content
-        """
-        try: 
-            with open(BOOKMARKS, "r", encoding='utf-8') as f:
-                self.bm_data = json.load(f)
-        except Exception as e:
-            Exc.exit(
-                f"Cannot load bookmarks file {BOOKMARKS}"
-                f"\n{e}"
-            )
