@@ -12,14 +12,14 @@ class ShowMode(Mode):
         self.bm_data: dict[str, dict|str|int] = {}
         self.bm_bar: dict[str, dict] = {}
 
-    def process_bookmarks(self):
+    def process_bookmarks(self) -> None:
         """entry function when this mode is selected by user
         """
         self.load_bookmark_file()
         self.get_bookmark_bar()
         self.output_bookmarks()
 
-    def load_bookmark_file(self):
+    def load_bookmark_file(self) -> None:
         """read BOOKMARKS file and store content
         """
         try: 
@@ -31,7 +31,7 @@ class ShowMode(Mode):
                 f"\n{e}"
             )
 
-    def get_bookmark_bar(self):
+    def get_bookmark_bar(self) -> None:
         """get bookmark_bar from read in BOOKMARK file
         """
         try:
@@ -43,7 +43,7 @@ class ShowMode(Mode):
                 f"\n{e}"
             )
 
-    def output_bookmarks(self):
+    def output_bookmarks(self) -> None:
         """output bookmarks to CLI
         """
         pass
