@@ -1,5 +1,5 @@
 from pytest_mock import MockerFixture
-from unittest.mock import MagicMock, patch, Mock
+from unittest.mock import MagicMock, patch
 import unittest
 import pytest
 from pathlib import Path
@@ -7,11 +7,17 @@ from pathlib import Path
 from src.etc.paths import ROOT
 from src.modes.show_mode import ShowMode
 from src.modes import show_mode
+from src.etc.exceptions import Exc
 
 
-@pytest.fixture
-def mock_bm_data() -> dict[str, dict|str|int]:
-    return {
+def get_exp_bm_data_roots() -> dict[str, dict]:
+   """returns expected data of BOOKMARKS file -> roots after json.load
+
+   Returns:
+       dict[str, dict]: expected data as dict
+   """
+   return {
+      "bookmark_bar": {
          "children": [ {
             "children": [ {
                "date_added": "13286469372158655",
@@ -95,13 +101,95 @@ def mock_bm_data() -> dict[str, dict|str|int]:
          "id": "1",
          "name": "Lesezeichenleiste",
          "type": "folder"
+      },
+      "other": {
+         "children": [  ],
+         "date_added": "13314663694638864",
+         "date_last_used": "0",
+         "date_modified": "13339612917749873",
+         "guid": "82b081ec-3dd3-529c-8475-ab6c344590dd",
+         "id": "2",
+         "name": "Weitere Lesezeichen",
+         "type": "folder"
+      },
+      "synced": {
+         "children": [ {
+            "date_added": "13251073445185664",
+            "date_last_used": "0",
+            "guid": "5577687b-3464-48b0-bbc9-a4160717be20",
+            "id": "198",
+            "name": "Teekanne Ländertee Collection Box, 1er Pack (1 x 383.25 g): Amazon.de: Grocery",
+            "type": "url",
+            "url": "https://www.amazon.de/Teekanne-L%C3%A4ndertee-Collection-Pack-383-25/dp/B074FZCBRC/ref=mp_s_a_1_3?dchild=1&keywords=teekanne+teebox&qid=1606569148&sprefix=teekanne+teebox&sr=8-3"
+         }, {
+            "date_added": "13287138712190645",
+            "date_last_used": "0",
+            "guid": "72191e4e-808f-4ee5-98aa-117f53a1070c",
+            "id": "199",
+            "name": "8 Lösungen zur Behebung „PC fährt hoch, Bildschirm schwarz/leer“",
+            "type": "url",
+            "url": "https://de.minitool.com/datenwiederherstellung/pc-faehrt-hoch-aber-kein-bild-geloest.html"
+         }, {
+            "date_added": "13287423186595292",
+            "date_last_used": "0",
+            "guid": "4dc8f9d0-660d-497f-a8c8-823865db11c0",
+            "id": "200",
+            "name": "Wildromantische Badestellen in Deutschland| MERIAN",
+            "type": "url",
+            "url": "https://www.merian.de/deutschland/sechs-wilde-badestellen-zum-alleinsein"
+         } ],
+         "date_added": "13314663694638866",
+         "date_last_used": "0",
+         "date_modified": "13287423186595292",
+         "guid": "4cf2e351-0e85-532b-bb37-df045d8f8d0f",
+         "id": "3",
+         "name": "Mobile Lesezeichen",
+         "type": "folder"
       }
+   }
 
 
 class TestShowMode(unittest.TestCase):
    def setUp(self) -> None:
       self.show_modes: ShowMode = ShowMode()
 
-   def test_load_bookmark_file(self):
-      with patch.object(show_mode, "BOOKMARKS", Path(ROOT, "test", "testdata", "231030_Bookmarks")):
+   def test_load_bookmark_file_success(self):
+      """check successful reading of BOOKMARKS file content
+      - use BOOKMARKS file stored in ./test/testdata/
+      """
+      with patch.object(
+         show_mode,
+         "BOOKMARKS",
+         Path(ROOT, "test", "testdata", "231030_Bookmarks")
+      ):
          self.show_modes.load_bookmark_file()
+
+      # assert dict keys #
+      assert list(self.show_modes.bm_data.keys()) == [
+         "checksum",
+         "roots",
+         "sync_metadata",
+         "version",
+      ]
+
+      # assert dict values #
+      assert self.show_modes.bm_data[
+         "checksum"] == "81a729c7af18b037e563bda45193eb13"
+      assert self.show_modes.bm_data[
+         "roots"] == get_exp_bm_data_roots()
+      assert self.show_modes.bm_data[
+         "sync_metadata"].startswith("Cu8BCs")
+      assert self.show_modes.bm_data[
+         "version"] == 1
+
+   def test_load_bookmark_file_fail(self):
+      """check failed reading of BOOKMARKS file content
+      - use not existing BOOKMARKS file
+      """
+      with patch.object(
+         show_mode,
+         "BOOKMARKS",
+         Path(ROOT, "test", "testdata", "not_existing_file")
+      ):
+         with pytest.raises(SystemExit):
+            self.show_modes.load_bookmark_file()

@@ -15,10 +15,9 @@ class ShowMode(Mode):
     def process_bookmarks(self):
         """entry function when this mode is selected by user
         """
-        pass
+        self.load_bookmark_file()
 
     def show_bookmarks(self):
-        self.load_bookmark_file()
         self.get_bookmark_bar()
         self.print_bm_bar()
         self.print_children(self.bm_bar["children"])
@@ -59,8 +58,8 @@ class ShowMode(Mode):
 # version
 
     def load_bookmark_file(self):
-        print(BOOKMARKS)
-        print("TEST")#debug
+        """read BOOKMARKS file and store content
+        """
         try: 
             with open(BOOKMARKS, "r", encoding='utf-8') as f:
                 self.bm_data = json.load(f)
