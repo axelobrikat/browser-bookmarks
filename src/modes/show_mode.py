@@ -16,9 +16,9 @@ class ShowMode(Mode):
         """entry function when this mode is selected by user
         """
         self.load_bookmark_file()
+        self.get_bookmark_bar()
 
     def show_bookmarks(self):
-        self.get_bookmark_bar()
         self.print_bm_bar()
         self.print_children(self.bm_bar["children"])
 
@@ -27,7 +27,7 @@ class ShowMode(Mode):
             self.bm_bar = self.bm_data["roots"]["bookmark_bar"]
         except Exception as e:
             Exc.exit(
-                f"Cannot find bookmark_bar in Bookmarks file {BOOKMARKS}."
+                f"Cannot find 'roots'->'bookmark_bar' in Bookmarks file {BOOKMARKS}."
                 f"\nMake sure you specified the correct file."
                 f"\n{e}"
             )
