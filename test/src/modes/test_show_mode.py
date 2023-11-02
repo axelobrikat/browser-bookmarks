@@ -2,7 +2,7 @@
 Note, this test file presents different approaches for unit testing python files
 """
 from pytest_mock import MockerFixture
-from unittest.mock import MagicMock, patch
+from unittest.mock import MagicMock, patch, Mock
 import unittest
 import pytest
 from pathlib import Path
@@ -47,10 +47,32 @@ def test_process_bookmarks(
    """
    sm = ShowMode()
    sm.process_bookmarks()
-
    mock_load_bookmark_file.assert_called_once()
    mock_output_bookmarks.assert_called_once()
    mock_get_bookmark_bar.assert_called_once()
+
+
+
+@patch.object(ShowMode, "output_head")
+@patch.object(ShowMode, "parse_bm_bar_children")
+@patch.object(ShowMode, "output_bm_bar_children")
+def test_output_bookmarks(
+   mock_output_bm_bar_children: Mock,
+   parse_bm_bar_children: Mock,
+   output_head: Mock,
+   ):
+   """test function calls in output_bookmarks-function
+
+   Args:
+       mock_output_bm_bar_children (Mock): mocked function
+       parse_bm_bar_children (Mock): mocked function
+       output_head (Mock): mocked function
+   """
+   sm = ShowMode()
+   sm.output_bookmarks()
+   output_head.assert_called_once()
+   parse_bm_bar_children.assert_called_once()
+   mock_output_bm_bar_children.assert_called_once()
 
 
 

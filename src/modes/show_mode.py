@@ -46,6 +46,17 @@ class ShowMode(Mode):
     def output_bookmarks(self) -> None:
         """output bookmarks to CLI
         """
+        self.output_head()
+        self.parse_bm_bar_children()
+        self.output_bm_bar_children()
+
+    def output_head(self) -> None:
+        pass
+
+    def parse_bm_bar_children(self) -> None:
+        pass
+
+    def output_bm_bar_children(self) -> None:
         pass
 
 
