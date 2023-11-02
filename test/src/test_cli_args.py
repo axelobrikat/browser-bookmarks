@@ -3,7 +3,7 @@ from pytest_mock import MockerFixture
 from pathlib import Path
 import os
 import psutil
-from unittest.mock import MagicMock, patch
+from unittest.mock import MagicMock
 
 from src.cli_args import Args
 
