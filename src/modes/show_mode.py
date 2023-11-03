@@ -60,8 +60,8 @@ class ShowMode(Mode):
         """for each "root" in BOOKMARKS file,
         ... create Root object and append to list
         """
-        for root in self.bm_data["roots"]:
-            self.roots.append(Root(root))
+        for key, val in self.bm_data["roots"].items():
+            self.roots.append(Root(key, val))
 
     def save_bookmark_bar(self) -> None:
         """save bookmark_bar from read in BOOKMARK file

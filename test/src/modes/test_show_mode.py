@@ -334,11 +334,16 @@ class TestShowMode(unittest.TestCase):
          "bar",
          "baz",
       ]
-      self.show_modes.bm_data: dict = {
+      exp_contents: list[dict[str,int]] = [
+         {"f":0},
+         {"b":1},
+         {"b":2},
+      ]
+      self.show_modes.bm_data: dict[str, dict] = {
          "roots": {
-            exp_roots[0]: {},
-            exp_roots[1]: {},
-            exp_roots[2]: {},
+            exp_roots[0]: exp_contents[0],
+            exp_roots[1]: exp_contents[1],
+            exp_roots[2]: exp_contents[2],
          }
       }
 
@@ -346,6 +351,7 @@ class TestShowMode(unittest.TestCase):
 
       for root in self.show_modes.roots:
          assert root.root_name in exp_roots
+         assert root.content in exp_contents
 
 
    def test_save_bookmark_bar(self):
