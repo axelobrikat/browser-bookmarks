@@ -322,6 +322,28 @@ class TestShowMode(unittest.TestCase):
       self.show_modes.bm_data = 0
       assert self.show_modes.check_bm_data_for_json() == False
 
+   def test_save_bookmark_roots(self):
+      """test saving of roots in BOOKMARKS file as separate Root instances
+      """
+      exp_roots: list[str] = [
+         "foo",
+         "bar",
+         "baz",
+      ]
+      self.show_modes.bm_data: dict = {
+         "roots": {
+            exp_roots[0]: {},
+            exp_roots[1]: {},
+            exp_roots[2]: {},
+         }
+      }
+
+      self.show_modes.save_bookmark_roots()
+
+      for root in self.show_modes.roots:
+         assert root.name in exp_roots
+
+
    def test_save_bookmark_bar(self):
       """test saving of bookmark_bar, when loading BOOKMARKS files beforehand was successful
       """

@@ -31,11 +31,6 @@ class ShowMode(Mode):
         self.save_bookmark_bar()
         self.output_bookmarks()
 
-    def save_bookmark_roots(self) -> None:
-        for root in self.bm_data["roots"]:
-            self.roots.append(Root(root))
-
-
     def load_bookmark_file(self) -> None:
         """read BOOKMARKS file, store content and check that it is dict type
         """
@@ -60,6 +55,13 @@ class ShowMode(Mode):
         if type(self.bm_data) == dict:
             return True
         return False
+
+    def save_bookmark_roots(self) -> None:
+        """for each "root" in BOOKMARKS file,
+        ... create Root object and append to list
+        """
+        for root in self.bm_data["roots"]:
+            self.roots.append(Root(root))
 
     def save_bookmark_bar(self) -> None:
         """save bookmark_bar from read in BOOKMARK file
