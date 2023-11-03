@@ -268,6 +268,7 @@ class TestShowModeLoadFileFail(unittest.TestCase):
    def setUp(self) -> None:
       self.show_modes: ShowMode = ShowMode()
 
+
    def test_load_bookmark_file_load_fail(self):
       """check failed reading of BOOKMARKS file content
       - use not existing BOOKMARKS file
@@ -279,6 +280,7 @@ class TestShowModeLoadFileFail(unittest.TestCase):
       ):
          with pytest.raises(SystemExit):
             self.show_modes.load_bookmark_file()
+
 
    @patch.object(Exc, "exit")
    def test_load_bookmark_file_typecheck_fail(self, mock_exit: Mock):
@@ -311,6 +313,7 @@ class TestShowMode(unittest.TestCase):
    def setUp(self) -> None:
       self.show_modes: ShowMode = ShowMode()
 
+
    def test_check_bm_data_for_json(self):
       """test type-checking of bm_data
       """
@@ -321,6 +324,7 @@ class TestShowMode(unittest.TestCase):
       # test case 2: bm_data is not dict #
       self.show_modes.bm_data = 0
       assert self.show_modes.check_bm_data_for_json() == False
+
 
    def test_save_bookmark_roots(self):
       """test saving of roots in BOOKMARKS file as separate Root instances
