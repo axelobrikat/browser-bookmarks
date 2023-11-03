@@ -144,13 +144,3 @@ class TestMainInvalidDocopt():
             sys.argv = argv.split(' ')
             with pytest.raises(docopt.DocoptExit):
                 main()
-
-
-# def test_funcc(capsys: CaptureFixture):
-#     func()
-#     assert capsys.readouterr().out == (
-#         "hello world\n"
-#         "hello world2\n"
-#         "hello world3\n"
-#     )
-#     print("==> Function for testing captured output is successful.")

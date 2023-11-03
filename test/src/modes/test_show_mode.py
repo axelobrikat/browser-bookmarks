@@ -13,26 +13,26 @@ from src.modes import show_mode
 from src.etc.exceptions import Exc
 
 
-@pytest.fixture
-def mock_load_bookmark_file(mocker: MockerFixture) -> MagicMock:
-   return mocker.patch.object(
-      ShowMode,
-      "load_bookmark_file",
-   )
+# @pytest.fixture
+# def mock_load_bookmark_file(mocker: MockerFixture) -> MagicMock:
+#    return mocker.patch.object(
+#       ShowMode,
+#       "load_bookmark_file",
+#    )
 
-@pytest.fixture
-def mock_output_bookmarks(mocker: MockerFixture) -> MagicMock:
-   return mocker.patch.object(
-      ShowMode,
-      "output_bookmarks",
-   )
+# @pytest.fixture
+# def mock_output_bookmarks(mocker: MockerFixture) -> MagicMock:
+#    return mocker.patch.object(
+#       ShowMode,
+#       "output_bookmarks",
+#    )
 
-@pytest.fixture
-def mock_save_bookmark_bar(mocker: MockerFixture) -> MagicMock:
-   return mocker.patch.object(
-      ShowMode,
-      "save_bookmark_bar",
-   )
+# @pytest.fixture
+# def mock_save_bookmark_bar(mocker: MockerFixture) -> MagicMock:
+#    return mocker.patch.object(
+#       ShowMode,
+#       "save_bookmark_bar",
+#    )
 
 # def test_process_bookmarks(
 #       mock_load_bookmark_file: MagicMock,
@@ -54,26 +54,26 @@ def mock_save_bookmark_bar(mocker: MockerFixture) -> MagicMock:
 
 
 
-@patch.object(ShowMode, "output_head")
-@patch.object(ShowMode, "parse_bm_bar_children")
-@patch.object(ShowMode, "output_bm_bar_children")
-def test_output_bookmarks(
-   mock_output_bm_bar_children: Mock,
-   parse_bm_bar_children: Mock,
-   output_head: Mock,
-   ):
-   """test function calls in output_bookmarks-function
+# @patch.object(ShowMode, "output_head")
+# @patch.object(ShowMode, "parse_bm_bar_children")
+# @patch.object(ShowMode, "output_bm_bar_children")
+# def test_output_bookmarks(
+#    mock_output_bm_bar_children: Mock,
+#    parse_bm_bar_children: Mock,
+#    output_head: Mock,
+#    ):
+#    """test function calls in output_bookmarks-function
 
-   Args:
-       mock_output_bm_bar_children (Mock): mocked function
-       parse_bm_bar_children (Mock): mocked function
-       output_head (Mock): mocked function
-   """
-   sm = ShowMode()
-   sm.output_bookmarks()
-   output_head.assert_called_once()
-   parse_bm_bar_children.assert_called_once()
-   mock_output_bm_bar_children.assert_called_once()
+#    Args:
+#        mock_output_bm_bar_children (Mock): mocked function
+#        parse_bm_bar_children (Mock): mocked function
+#        output_head (Mock): mocked function
+#    """
+#    sm = ShowMode()
+#    sm.output_bookmarks()
+#    output_head.assert_called_once()
+#    parse_bm_bar_children.assert_called_once()
+#    mock_output_bm_bar_children.assert_called_once()
 
 
 

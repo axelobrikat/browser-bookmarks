@@ -18,20 +18,10 @@ class ShowMode(Mode):
         """entry function when this mode is selected by user
         """
         self.load_bookmark_file()
-
-#####################
-# hier einhaken, neben bookmark bar gibt es noch mehr roots
-# ROOTS Klasse erstellen und hier durch so viele instanzen
-# ... anlegen, wie bookmarks file hergibt
-# danach durch iterieren und roots' children outputen
-#####################
         self.create_bookmark_roots()
         for root in self.roots:
-
-
-        return
-        self.save_bookmark_bar()
-        self.output_bookmarks()
+            root.output_name()
+            root.output_children(root.content["children"])
 
     def load_bookmark_file(self) -> None:
         """read BOOKMARKS file, store content and check that it is dict type

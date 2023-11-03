@@ -1,4 +1,7 @@
+from pytest import CaptureFixture
+
 from src.bookmark_root import Root
+
 
 def test_init():
     """test __init__ of Root class
@@ -20,3 +23,15 @@ def test_str():
     """
     r = Root("test", {"foo": "bar"})
     assert r.__str__() == "This is bookmark root: test."
+
+def test_output_name(capsys: CaptureFixture):
+    """test printing name to cli
+
+    Args:
+        capsys (CaptureFixture): captures output to cli
+    """
+    r = Root("test", {"name": "bar"})
+    r.output_name()
+    assert capsys.readouterr().out == (
+        "bar\n"
+    )
