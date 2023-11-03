@@ -25,7 +25,7 @@ class ShowMode(Mode):
 # ... anlegen, wie bookmarks file hergibt
 # danach durch iterieren und roots' children outputen
 #####################
-        self.save_bookmark_roots()
+        self.create_bookmark_roots()
 
         return
         self.save_bookmark_bar()
@@ -56,7 +56,7 @@ class ShowMode(Mode):
             return True
         return False
 
-    def save_bookmark_roots(self) -> None:
+    def create_bookmark_roots(self) -> None:
         """for each "root" in BOOKMARKS file,
         ... create Root object and append to list
         """

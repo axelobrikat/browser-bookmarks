@@ -326,8 +326,8 @@ class TestShowMode(unittest.TestCase):
       assert self.show_modes.check_bm_data_for_json() == False
 
 
-   def test_save_bookmark_roots(self):
-      """test saving of roots in BOOKMARKS file as separate Root instances
+   def test_create_bookmark_roots(self):
+      """test creation of roots in BOOKMARKS file as separate Root instances
       """
       exp_roots: list[str] = [
          "foo",
@@ -342,7 +342,7 @@ class TestShowMode(unittest.TestCase):
          }
       }
 
-      self.show_modes.save_bookmark_roots()
+      self.show_modes.create_bookmark_roots()
 
       for root in self.show_modes.roots:
          assert root.name in exp_roots
