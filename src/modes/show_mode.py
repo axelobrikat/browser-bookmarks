@@ -25,15 +25,19 @@ class ShowMode(Mode):
 # ... anlegen, wie bookmarks file hergibt
 # danach durch iterieren und roots' children outputen
 #####################
-        # for root in self.bm_data["roots"]:
-        #     self.roots.append(Root(root))
-        # put this in -> self.save_bookmark_roots()
+        self.save_bookmark_roots()
 
+        return
         self.save_bookmark_bar()
         self.output_bookmarks()
 
+    def save_bookmark_roots(self) -> None:
+        for root in self.bm_data["roots"]:
+            self.roots.append(Root(root))
+
+
     def load_bookmark_file(self) -> None:
-        """read BOOKMARKS file and store content
+        """read BOOKMARKS file, store content and check that it is dict type
         """
         try: 
             with open(BOOKMARKS, "r", encoding='utf-8') as f:
@@ -43,6 +47,19 @@ class ShowMode(Mode):
                 f"Cannot load bookmarks file {BOOKMARKS}"
                 f"\n{e}"
             )
+
+        if not self.check_bm_data_for_json():
+            Exc.exit(
+                f"Data specified in BOOKMARKS file has not the correct format."
+                f"Check that is has JSON format."
+            )
+
+    def check_bm_data_for_json(self) -> bool:
+        """check that BOOKMARKS file content is json format
+        """
+        if type(self.bm_data) == dict:
+            return True
+        return False
 
     def save_bookmark_bar(self) -> None:
         """save bookmark_bar from read in BOOKMARK file

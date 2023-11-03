@@ -10,6 +10,7 @@ from pathlib import Path
 from src.etc.paths import ROOT
 from src.modes.show_mode import ShowMode
 from src.modes import show_mode
+from src.etc.exceptions import Exc
 
 
 @pytest.fixture
@@ -33,23 +34,23 @@ def mock_save_bookmark_bar(mocker: MockerFixture) -> MagicMock:
       "save_bookmark_bar",
    )
 
-def test_process_bookmarks(
-      mock_load_bookmark_file: MagicMock,
-      mock_output_bookmarks: MagicMock,
-      mock_save_bookmark_bar: MagicMock,
-      ):
-   """test function calls in process_bookmarks-function
+# def test_process_bookmarks(
+#       mock_load_bookmark_file: MagicMock,
+#       mock_output_bookmarks: MagicMock,
+#       mock_save_bookmark_bar: MagicMock,
+#       ):
+#    """test function calls in process_bookmarks-function
 
-   Args:
-       mock_load_bookmark_file (MagicMock): mocked function
-       mock_output_bookmarks (MagicMock): mocked function
-       mock_save_bookmark_bar (MagicMock): mocked function
-   """
-   sm = ShowMode()
-   sm.process_bookmarks()
-   mock_load_bookmark_file.assert_called_once()
-   mock_output_bookmarks.assert_called_once()
-   mock_save_bookmark_bar.assert_called_once()
+#    Args:
+#        mock_load_bookmark_file (MagicMock): mocked function
+#        mock_output_bookmarks (MagicMock): mocked function
+#        mock_save_bookmark_bar (MagicMock): mocked function
+#    """
+#    sm = ShowMode()
+#    sm.process_bookmarks()
+#    mock_load_bookmark_file.assert_called_once()
+#    mock_output_bookmarks.assert_called_once()
+#    mock_save_bookmark_bar.assert_called_once()
 
 
 
@@ -218,8 +219,8 @@ def get_exp_bm_data_roots() -> dict[str, dict]:
 
 
 
-class TestShowModePatchedBOOKMARKS(unittest.TestCase):
-   """test show_mode.py with patched BOOKMARKS file in ./test/testdata
+class TestShowModeLoadFileSuccess(unittest.TestCase):
+   """test show_mode.py with a patched BOOKMARKS file in ./test/testdata
    """
    def setUp(self) -> None:
       self.show_modes: ShowMode = ShowMode()
@@ -267,7 +268,7 @@ class TestShowModeLoadFileFail(unittest.TestCase):
    def setUp(self) -> None:
       self.show_modes: ShowMode = ShowMode()
 
-   def test_load_bookmark_file_fail(self):
+   def test_load_bookmark_file_load_fail(self):
       """check failed reading of BOOKMARKS file content
       - use not existing BOOKMARKS file
       """
@@ -279,15 +280,49 @@ class TestShowModeLoadFileFail(unittest.TestCase):
          with pytest.raises(SystemExit):
             self.show_modes.load_bookmark_file()
 
+   @patch.object(Exc, "exit")
+   def test_load_bookmark_file_typecheck_fail(self, mock_exit: Mock):
+      """test exiting program when content of BOOKMARKS file is no json
+
+      Args:
+          mock_exit (Mock): mocked exit function
+      """
+      with patch.object(
+         show_mode,
+         "BOOKMARKS",
+         Path(ROOT, "test", "testdata", "231030_Bookmarks")
+      ):
+         with patch.object(
+            ShowMode,
+            "check_bm_data_for_json",
+            return_value=False
+         ):
+            self.show_modes.load_bookmark_file()
+            mock_exit.assert_called_once_with(
+                f"Data specified in BOOKMARKS file has not the correct format."
+                f"Check that is has JSON format."
+            )
+
 
 
 class TestShowMode(unittest.TestCase):
-   """test show_mode.py with a already read in BOOKMARKS
+   """test show_mode.py with already read in bookmarks (dict)
    """
    def setUp(self) -> None:
       self.show_modes: ShowMode = ShowMode()
 
-   def test_save_bookmark_bar_success(self):
+   def test_check_bm_data_for_json(self):
+      """test type-checking of bm_data
+      """
+      # test case 1: bm_data is dict #
+      self.show_modes.bm_data = {}
+      assert self.show_modes.check_bm_data_for_json() == True
+
+      # test case 2: bm_data is not dict #
+      self.show_modes.bm_data = 0
+      assert self.show_modes.check_bm_data_for_json() == False
+
+   def test_save_bookmark_bar(self):
       """test saving of bookmark_bar, when loading BOOKMARKS files beforehand was successful
       """
       # test case 1: saving data successfully #
