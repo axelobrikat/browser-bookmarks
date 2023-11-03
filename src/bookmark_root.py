@@ -6,6 +6,7 @@ class Root():
     def __init__(self, root_name: str, content: dict) -> None:
         self.root_name: str = root_name
         self.content: dict = content
+        self.name: str = self.content.get("name", "")
 
     def __str__(self):
         return f"This is bookmark root: {self.root_name}."
