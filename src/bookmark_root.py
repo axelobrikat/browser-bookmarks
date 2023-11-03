@@ -7,4 +7,4 @@ class Root():
         self.name: str = root_name
 
     def __str__(self):
-        return f"Bookmark root: {self.name}."
+        return f"This is bookmark root: {self.name}."

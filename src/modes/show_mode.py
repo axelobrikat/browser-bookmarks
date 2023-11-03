@@ -3,7 +3,7 @@ import json
 from src.modes.mode import Mode
 from src.etc.paths import BOOKMARKS
 from src.etc.exceptions import Exc
-from src.bookmark_roots import Root
+from src.bookmark_root import Root
 
 
 class ShowMode(Mode):
