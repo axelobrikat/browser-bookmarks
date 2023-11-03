@@ -345,7 +345,7 @@ class TestShowMode(unittest.TestCase):
       self.show_modes.create_bookmark_roots()
 
       for root in self.show_modes.roots:
-         assert root.name in exp_roots
+         assert root.root_name in exp_roots
 
 
    def test_save_bookmark_bar(self):
