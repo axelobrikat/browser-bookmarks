@@ -352,20 +352,3 @@ class TestShowMode(unittest.TestCase):
       for root in self.show_modes.roots:
          assert root.root_name in exp_roots
          assert root.content in exp_contents
-
-
-   def test_save_bookmark_bar(self):
-      """test saving of bookmark_bar, when loading BOOKMARKS files beforehand was successful
-      """
-      # test case 1: saving data successfully #
-      self.show_modes.bm_data: dict = get_exp_bm_data_roots()
-      self.show_modes.save_bookmark_bar()
-      self.assertDictEqual(
-         self.show_modes.bm_bar,
-         self.show_modes.bm_data["roots"]["bookmark_bar"]
-      )
-
-      # test case 2: not saving data successfully #
-      self.show_modes.bm_data: dict = {}
-      with pytest.raises(SystemExit):
-         self.show_modes.save_bookmark_bar()

@@ -26,6 +26,8 @@ class ShowMode(Mode):
 # danach durch iterieren und roots' children outputen
 #####################
         self.create_bookmark_roots()
+        for root in self.roots:
+
 
         return
         self.save_bookmark_bar()
@@ -62,64 +64,3 @@ class ShowMode(Mode):
         """
         for key, val in self.bm_data["roots"].items():
             self.roots.append(Root(key, val))
-
-    def save_bookmark_bar(self) -> None:
-        """save bookmark_bar from read in BOOKMARK file
-        """
-        try:
-            self.bm_bar = self.bm_data["roots"]["bookmark_bar"]
-        except Exception as e:
-            Exc.exit(
-                f"Cannot find 'roots'->'bookmark_bar' in Bookmarks file {BOOKMARKS}."
-                f"\nMake sure you specified the correct file."
-                f"\n{e}"
-            )
-
-    def output_bookmarks(self) -> None:
-        """output bookmarks to CLI
-        """
-        self.output_head()
-        self.parse_bm_bar_children()
-        self.output_bm_bar_children()
-
-    def output_head(self) -> None:
-        """output head of bookmarks: bookmark_bar
-        """
-        print(self.bm_bar["name"])
-
-    def parse_bm_bar_children(self) -> None:
-        pass
-
-    def output_bm_bar_children(self) -> None:
-        pass
-
-
-
-    def show_bookmarks(self):
-        self.print_bm_bar()
-        self.print_children(self.bm_bar["children"])
-
-
-    def print_bm_bar(self):
-        print(self.bm_bar["name"])
-
-    def print_children(self, childs: list[dict]):
-        for child in childs:
-            print(child)
-            if child != "children":
-                continue
-            c: list[dict] = child.get("children")
-            if c != None:
-                self.print_children(c)
-
-        # for key, val in self.bm_data["roots"]["bookmark_bar"].items():
-        #     print(key)
-        #     print(type(key))
-        #     print(type(val))
-
-        #     # print(val)
-        #     print()
-# checksum
-# roots
-# sync_metadata
-# version
