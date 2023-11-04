@@ -11,7 +11,6 @@ class ShowMode(Mode):
     """
     def __init__(self) -> None:
         self.bm_data: dict[str, dict|str|int] = {}
-        self.bm_bar: dict[str, dict] = {}
         self.roots: list[Root] = []
 
     def process_bookmarks(self) -> None:

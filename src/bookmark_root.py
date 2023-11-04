@@ -12,7 +12,7 @@ class Root():
         return f"This is bookmark root: {self.root_name}."
     
     def output_name(self):
-        """print name of Root isntance
+        """print name of Root instance
         """
         print(self.name)
     
