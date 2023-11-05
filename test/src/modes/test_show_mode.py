@@ -2,7 +2,7 @@
 Note, this test file presents different approaches for unit testing python files
 """
 from pytest_mock import MockerFixture
-from unittest.mock import MagicMock, patch, Mock
+from unittest.mock import MagicMock, patch, Mock, call
 import unittest
 import pytest
 from pathlib import Path
@@ -11,69 +11,65 @@ from src.etc.paths import ROOT
 from src.modes.show_mode import ShowMode
 from src.modes import show_mode
 from src.etc.exceptions import Exc
-
-
-# @pytest.fixture
-# def mock_load_bookmark_file(mocker: MockerFixture) -> MagicMock:
-#    return mocker.patch.object(
-#       ShowMode,
-#       "load_bookmark_file",
-#    )
-
-# @pytest.fixture
-# def mock_output_bookmarks(mocker: MockerFixture) -> MagicMock:
-#    return mocker.patch.object(
-#       ShowMode,
-#       "output_bookmarks",
-#    )
-
-# @pytest.fixture
-# def mock_save_bookmark_bar(mocker: MockerFixture) -> MagicMock:
-#    return mocker.patch.object(
-#       ShowMode,
-#       "save_bookmark_bar",
-#    )
-
-# def test_process_bookmarks(
-#       mock_load_bookmark_file: MagicMock,
-#       mock_output_bookmarks: MagicMock,
-#       mock_save_bookmark_bar: MagicMock,
-#       ):
-#    """test function calls in process_bookmarks-function
-
-#    Args:
-#        mock_load_bookmark_file (MagicMock): mocked function
-#        mock_output_bookmarks (MagicMock): mocked function
-#        mock_save_bookmark_bar (MagicMock): mocked function
-#    """
-#    sm = ShowMode()
-#    sm.process_bookmarks()
-#    mock_load_bookmark_file.assert_called_once()
-#    mock_output_bookmarks.assert_called_once()
-#    mock_save_bookmark_bar.assert_called_once()
+from src.bookmark_root import Root
 
 
 
-# @patch.object(ShowMode, "output_head")
-# @patch.object(ShowMode, "parse_bm_bar_children")
-# @patch.object(ShowMode, "output_bm_bar_children")
-# def test_output_bookmarks(
-#    mock_output_bm_bar_children: Mock,
-#    parse_bm_bar_children: Mock,
-#    output_head: Mock,
-#    ):
-#    """test function calls in output_bookmarks-function
+@patch.object(ShowMode, "load_bookmark_file")
+@patch.object(ShowMode, "create_bookmark_roots")
+@patch.object(Root, "output_name")
+@patch.object(Root, "output_children")
+def test_process_bookmarks_with_roots(
+   mock_output_children: Mock,
+   mock_output_name: Mock,
+   mock_create_bookmark_roots: Mock,
+   mock_load_bookmark_file: Mock,
+   ):
+   """test function calls in output_bookmarks-function
 
-#    Args:
-#        mock_output_bm_bar_children (Mock): mocked function
-#        parse_bm_bar_children (Mock): mocked function
-#        output_head (Mock): mocked function
-#    """
-#    sm = ShowMode()
-#    sm.output_bookmarks()
-#    output_head.assert_called_once()
-#    parse_bm_bar_children.assert_called_once()
-#    mock_output_bm_bar_children.assert_called_once()
+   Args:
+       mock_output_children (Mock): mocked function
+       mock_output_name (Mock): mocked function
+       mock_create_bookmark_roots (Mock): mocked function
+       mock_load_bookmark_file (Mock): mocked function
+   """
+   sm = ShowMode()
+   exp_call: dict = {"foo": "bar"}
+   sm.roots = [
+      Root("bar", {"children": exp_call}),
+      Root("baz", {"children": exp_call}),
+   ]
+   sm.process_bookmarks()
+   mock_load_bookmark_file.assert_called_once()
+   mock_create_bookmark_roots.assert_called_once()
+   assert mock_output_name.call_count == 2
+   mock_output_name.assert_called()
+   assert mock_output_children.call_count == 2
+   assert mock_output_children.call_args_list == [
+      call(exp_call),
+      call(exp_call),
+   ]
+
+@patch.object(ShowMode, "load_bookmark_file")
+@patch.object(ShowMode, "create_bookmark_roots")
+@patch.object(Root, "output_name")
+def test_process_bookmarks_without_roots(
+   mock_output_name: Mock,
+   mock_create_bookmark_roots: Mock,
+   mock_load_bookmark_file: Mock,
+   ):
+   """test funcion calls in output_bookmarks function
+
+   Args:
+       mock_output_name (Mock): mocked function
+       mock_create_bookmark_roots (Mock): mocked function
+       mock_load_bookmark_file (Mock): mocked function
+   """
+   sm = ShowMode()
+   sm.process_bookmarks()
+   mock_load_bookmark_file.assert_called_once()
+   mock_create_bookmark_roots.assert_called_once()
+   mock_output_name.assert_not_called()
 
 
 
