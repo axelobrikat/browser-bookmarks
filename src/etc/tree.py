@@ -8,4 +8,6 @@ class Tree():
         self.level: int = -1
 
     def output_level_space(self) -> None:
+        """print tree structure to CLI
+        """
         print(self.level*self.space*4 + self.pipe + 3*self.strike, end="")
