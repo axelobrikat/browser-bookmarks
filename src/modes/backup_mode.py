@@ -18,6 +18,7 @@ class BackupMode(Mode):
         pass
         # save_current_datetime()
         # transform_date() -> YYMMDD_HHmmss
+          # with f"{str(self.now.year)[-2:]}..."
         # copy_bookmarks_file() 
           # with shutil.copyfile(src, dest)
           # print to cli that copied successful
