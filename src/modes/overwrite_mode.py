@@ -5,7 +5,7 @@ from src.modes.mode import Mode
 
 class OverwriteMode(Mode):
     def __init__(self, bookmarks_path: Path) -> None:
-        self.bookmarks_path = bookmarks_path
+        self.bookmarks_path: Path = bookmarks_path
 
     def process_bookmarks(self):
         """entry function when this mode is selected by user
