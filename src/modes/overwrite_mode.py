@@ -14,3 +14,13 @@ class OverwriteMode(Mode):
             # https://stackoverflow.com/questions/63105717/how-do-i-run-a-test-to-check-if-google-chrome-is-running-python
             # https://stackoverflow.com/questions/11308603/logic-behind-creating-bookmark-checksum-in-google-chrome
         pass
+
+    def bookmarks_path_exists(self) -> bool:
+        """check whether specified bookmarks file exists
+
+        Returns:
+            bool: True, if file exists, false if not
+        """        
+        if self.bookmarks_path.is_file():
+            return True
+        return False
