@@ -18,13 +18,7 @@ class BackupMode(Mode):
     def process_bookmarks(self):
         """entry function when this mode is selected by user
         """
-        pass
-        # save_current_datetime()
-        # transform_date() -> YYMMDD_HHmmss
-            # with f"{str(self.now.year)[-2:]}..."
-        # copy_bookmarks_file() 
-            # with shutil.copyfile(src, dest)
-            # print to cli that copied successful
+        self.copy_bookmarks_file()
     
     def copy_bookmarks_file(self):
         """copy bookmarks file to ./data as file yymmdd_HHMMSS_Backup_Bookmarks

@@ -1,6 +1,7 @@
 import pytest
 import os
 from pytest import CaptureFixture
+from pytest_mock import MockerFixture
 from pathlib import Path
 from unittest.mock import MagicMock, patch
 from datetime import datetime
@@ -10,11 +11,29 @@ from src.modes import backup_mode
 from src.etc.paths import ROOT
 
 
+@pytest.fixture
+def mock_copy_bookmarks_file(mocker: MockerFixture) -> MagicMock:
+    return mocker.patch.object(
+        BackupMode,
+        "copy_bookmarks_file",
+    )
+
+
 def test_init():
     """test __init__ of class
     """
     b = BackupMode()
     assert b.dest_path == Path(__file__).resolve().parent.parent.parent.parent / "data"
+
+def test_process_bookmarks(mock_copy_bookmarks_file: MagicMock):
+    """test function call
+
+    Args:
+        mock_copy_bookmarks_file (MagicMock): mocked function
+    """
+    b = BackupMode()
+    b.process_bookmarks()
+    mock_copy_bookmarks_file.assert_called_once()
 
 def test_copy_bookmarks_file_success(capsys: CaptureFixture):
     """test successful copying of bookmarks file and outputtung of success message
