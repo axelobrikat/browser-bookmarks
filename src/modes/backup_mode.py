@@ -33,7 +33,7 @@ class BackupMode(Mode):
             )
             print(
                 f"Copy of file {BOOKMARKS} successfully saved"
-                f"\n as {self.dest_path / self.dest_name}."
+                f" as {self.dest_path / self.dest_name}."
             )
         except Exception as e:
             Exc.exit(

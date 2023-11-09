@@ -54,7 +54,7 @@ def test_copy_bookmarks_file_success(capsys: CaptureFixture):
 
     assert capsys.readouterr().out == (
         f"Copy of file {mock_bookmarks} successfully saved"
-        f"\n as {test_file}.\n"
+        f" as {test_file}.\n"
     )
 
 def test_copy_bookmarks_file_fail():
