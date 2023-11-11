@@ -38,7 +38,7 @@ class BackupMode(Mode):
         except Exception as e:
             Exc.exit(
                 f"Cannot create backup of bookmarks file."
-                f"{e}"
+                f"\n{e}"
             )
 
     def get_current_datetime(self) -> str:

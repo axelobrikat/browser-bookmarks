@@ -7,6 +7,7 @@ from unittest.mock import MagicMock, patch
 from datetime import datetime
 
 from src.modes.backup_mode import BackupMode
+from src.etc.exceptions import Exc
 from src.modes import backup_mode
 from src.etc.paths import ROOT
 
@@ -16,6 +17,13 @@ def mock_copy_bookmarks_file(mocker: MockerFixture) -> MagicMock:
     return mocker.patch.object(
         BackupMode,
         "copy_bookmarks_file",
+    )
+
+@pytest.fixture
+def mock_exit(mocker: MockerFixture) -> MagicMock:
+    return mocker.patch.object(
+        Exc,
+        "exit",
     )
 
 
@@ -57,14 +65,18 @@ def test_copy_bookmarks_file_success(capsys: CaptureFixture):
         f" as {test_file}.\n"
     )
 
-def test_copy_bookmarks_file_fail():
+def test_copy_bookmarks_file_fail(mock_exit: MagicMock):
     """check that SystemExit Exception gets raised
     """
     b = BackupMode()
 
     with patch.object(backup_mode, "BOOKMARKS", Path("not-existing-path")):
-        with pytest.raises(SystemExit):
-            b.copy_bookmarks_file()
+        b.copy_bookmarks_file()
+
+    mock_exit.assert_called_once()
+    assert str(mock_exit.call_args[0][0]).startswith(
+        f"Cannot create backup of bookmarks file.\n["
+    )
 
 @patch.object(backup_mode, "datetime")
 def test_get_current_datetime(mock_backup_mode: MagicMock|datetime):
