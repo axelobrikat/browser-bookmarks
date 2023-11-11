@@ -7,7 +7,7 @@ import unittest
 import pytest
 from pathlib import Path
 
-from src.etc.paths import ROOT
+from src.etc.paths import ROOT, BOOKMARKS
 from src.modes.show_mode import ShowMode
 from src.modes import show_mode
 from src.etc.exceptions import Exc
@@ -264,26 +264,32 @@ class TestShowModeLoadFileFail(unittest.TestCase):
    def setUp(self) -> None:
       self.show_modes: ShowMode = ShowMode()
 
-
-   def test_load_bookmark_file_load_fail(self):
+   @patch.object(Exc, "exit")
+   def test_load_bookmark_file_load_fail(self, mock_exit: MagicMock):
       """check failed reading of BOOKMARKS file content
       - use not existing BOOKMARKS file
+
+      Args:
+          mock_exit (MagicMock): mocked exit function
       """
       with patch.object(
          show_mode,
          "BOOKMARKS",
          Path(ROOT, "test", "testdata", "not_existing_file")
       ):
-         with pytest.raises(SystemExit):
-            self.show_modes.load_bookmark_file()
+         self.show_modes.load_bookmark_file()
 
+      mock_exit.assert_called_once()
+      assert str(mock_exit.call_args[0][0]).startswith(
+         f"Cannot load bookmarks file "
+      )
 
    @patch.object(Exc, "exit")
-   def test_load_bookmark_file_typecheck_fail(self, mock_exit: Mock):
+   def test_load_bookmark_file_typecheck_fail(self, mock_exit: MagicMock):
       """test exiting program when content of BOOKMARKS file is no json
 
       Args:
-          mock_exit (Mock): mocked exit function
+          mock_exit (MagicMock): mocked exit function
       """
       with patch.object(
          show_mode,

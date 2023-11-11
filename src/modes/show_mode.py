@@ -30,7 +30,7 @@ class ShowMode(Mode):
                 self.bm_data = json.load(f)
         except Exception as e:
             Exc.exit(
-                f"Cannot load bookmarks file {BOOKMARKS}"
+                f"Cannot load bookmarks file {BOOKMARKS}."
                 f"\n{e}"
             )
 
