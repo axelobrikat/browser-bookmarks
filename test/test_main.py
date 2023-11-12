@@ -74,7 +74,7 @@ class TestMainValidDocopt():
         self.set_cli_args.assert_called_once_with(self.exp_args)
         self.check_cli_args.assert_called_once()
         if exit_called:
-            self.exit.assert_called()
+            self.exit.assert_called_with(return_val)
         else:
             self.exit.assert_not_called()
             self.orchestrate_modes.assert_called_once()
