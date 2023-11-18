@@ -3,7 +3,7 @@ from unittest.mock import patch, MagicMock, call
 
 from src.bookmark_root import Root
 from src.etc.tree import Tree
-from test.src.modes.test_show_mode import get_exp_bm_data_roots
+from test.src.modes.test_modes import get_exp_bm_data_roots
 
 
 def test_init():

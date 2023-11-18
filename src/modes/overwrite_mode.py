@@ -10,9 +10,14 @@ class OverwriteMode(Mode):
     def process_bookmarks(self):
         """entry function when this mode is selected by user
         """
+        # if bookmark path exists - else
+        # load_bookmarks file and check for json structure
+        # check loaded bookmarks file for "sync_metadata" - print warning - ask user to proceed anyway?
+        # delete checksum ...
         #TODO: for cheksum etc, see
             # https://stackoverflow.com/questions/63105717/how-do-i-run-a-test-to-check-if-google-chrome-is-running-python
             # https://stackoverflow.com/questions/11308603/logic-behind-creating-bookmark-checksum-in-google-chrome
+        # overwrite - ask user if not sure, whether he wants to do a backup
         pass
 
     def bookmarks_path_exists(self) -> bool:
