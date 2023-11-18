@@ -3,6 +3,7 @@ from unittest import TestCase
 from unittest.mock import MagicMock, patch
 
 from src.modes.overwrite_mode import OverwriteMode
+from src.etc.exceptions import Exc
 
 
 class TestOverwriteMode(TestCase):
@@ -16,16 +17,22 @@ class TestOverwriteMode(TestCase):
         """
         assert self.o.bookmarks_path == self.dummy_file
 
+    @patch.object(Exc, "exit")
     @patch.object(OverwriteMode, "bookmarks_path_exists")
-    def test_process_bookmarks_path_exists(self, mock_bookmarks_path_exists: MagicMock):
+    def test_process_bookmarks_path_exists(self, mock_bookmarks_path_exists: MagicMock, mock_exit: MagicMock):
         # test case bookmarks_path_exists returns True #
         mock_bookmarks_path_exists.return_value = True
-        
+        self.o.process_bookmarks()
+        mock_exit.assert_not_called()
 
         # test case bookmarks_path_exists returns False #
+        self.o.bookmarks_path = "dummy"
         mock_bookmarks_path_exists.return_value = False
-
-
+        self.o.process_bookmarks()
+        mock_exit.assert_called_with(
+            f"Specified file dummy for overwriting browser "
+            f"bookmarks does not exist."
+        )
 
     def test_bookmarks_path_exists(self):
         """test function that checks whether specified file exists

@@ -33,7 +33,7 @@ class OverwriteMode(Mode):
 
         Returns:
             bool: True, if file exists, false if not
-        """        
+        """
         if self.bookmarks_path.is_file():
             return True
         return False
