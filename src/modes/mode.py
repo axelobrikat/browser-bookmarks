@@ -17,7 +17,7 @@ class Mode(ABC):
         pass # pragma: no cover
 
     def load_bookmark_file(self, bm_file: Path = BOOKMARKS) -> None:
-        """read BOOKMARKS file, store content and check that it is dict type
+        """read bookmarks file, store content and check that it is dict type
 
         Args:
             bm_file (Path, optional): path of bookmarks file. Defaults to BOOKMARKS.
@@ -33,12 +33,12 @@ class Mode(ABC):
 
         if not self.check_bm_data_for_json():
             Exc.exit(
-                f"Data specified in BOOKMARKS file has not the correct format."
+                f"Data specified in bookmarks file {bm_file} has not the correct format."
                 f"Check that is has JSON format."
             )
 
     def check_bm_data_for_json(self) -> bool:
-        """check that BOOKMARKS file content is json format
+        """check that bookmarks file content is json format
         """
         if type(self.bm_data) == dict:
             return True

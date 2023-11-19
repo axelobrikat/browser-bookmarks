@@ -230,10 +230,9 @@ class TestModeLoadFileFail(unittest.TestCase):
          "check_bm_data_for_json",
          return_value=False
       ):
-         self.mode.load_bookmark_file(
-            Path(ROOT, "test", "testdata", "231030_Bookmarks")
-         )
+         bm_file: Path = Path(ROOT, "test", "testdata", "231030_Bookmarks")
+         self.mode.load_bookmark_file(bm_file)
          mock_exit.assert_called_once_with(
-               f"Data specified in BOOKMARKS file has not the correct format."
+               f"Data specified in bookmarks file {bm_file} has not the correct format."
                f"Check that is has JSON format."
          )
