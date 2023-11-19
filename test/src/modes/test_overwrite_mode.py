@@ -20,6 +20,12 @@ class TestOverwriteMode(TestCase):
     @patch.object(Exc, "exit")
     @patch.object(OverwriteMode, "bookmarks_path_exists")
     def test_process_bookmarks_path_exists(self, mock_bookmarks_path_exists: MagicMock, mock_exit: MagicMock):
+        """test process_bookmarks if and if not path is existing
+
+        Args:
+            mock_bookmarks_path_exists (MagicMock): mocked function
+            mock_exit (MagicMock): mocked function
+        """
         # test case bookmarks_path_exists returns True #
         mock_bookmarks_path_exists.return_value = True
         self.o.process_bookmarks()
