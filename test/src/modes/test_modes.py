@@ -158,20 +158,20 @@ class TestModeLoadFileSuccess(unittest.TestCase):
    def setUp(self) -> None:
       self.mode: Mode = Mode()
 
-   @pytest.fixture(autouse=True)
-   def mock_bookmarks(self, mocker: MockerFixture):
-      self.mocked_bookmarks: MagicMock = mocker.patch.object(
-         mode,
-         "BOOKMARKS",
-         Path(ROOT, "test", "testdata", "231030_Bookmarks")
-      )
+   # # for global variable #
+   # @pytest.fixture(autouse=True)
+   # def mock_bookmarks(self, mocker: MockerFixture):
+   #    self.mocked_bookmarks: MagicMock = mocker.patch.object(
+   #       mode,
+   #       "BOOKMARKS",
+   #       Path(ROOT, "test", "testdata", "231030_Bookmarks")
+   #    )
 
    def test_load_bookmark_file_success(self):
       """check successful reading of BOOKMARKS file content
       - use BOOKMARKS file stored in ./test/testdata/
       """
-      with self.mocked_bookmarks:
-         self.mode.load_bookmark_file()
+      self.mode.load_bookmark_file(Path(ROOT, "test", "testdata", "231030_Bookmarks"))
 
       # assert dict keys #
       assert list(self.mode.bm_data.keys()) == [
@@ -210,16 +210,12 @@ class TestModeLoadFileFail(unittest.TestCase):
       Args:
           mock_exit (MagicMock): mocked exit function
       """
-      with patch.object(
-         mode,
-         "BOOKMARKS",
-         Path(ROOT, "test", "testdata", "not_existing_file")
-      ):
-         self.mode.load_bookmark_file()
+      bm_file: Path = Path(ROOT, "test", "testdata", "not_existing_file")
+      self.mode.load_bookmark_file(bm_file)
 
       mock_exit.assert_called_once()
       assert str(mock_exit.call_args[0][0]).startswith(
-         f"Cannot load bookmarks file "
+         f"Cannot load bookmarks file {bm_file}"
       )
 
    @patch.object(Exc, "exit")
@@ -230,17 +226,14 @@ class TestModeLoadFileFail(unittest.TestCase):
           mock_exit (MagicMock): mocked exit function
       """
       with patch.object(
-         mode,
-         "BOOKMARKS",
-         Path(ROOT, "test", "testdata", "231030_Bookmarks")
+         Mode,
+         "check_bm_data_for_json",
+         return_value=False
       ):
-         with patch.object(
-            Mode,
-            "check_bm_data_for_json",
-            return_value=False
-         ):
-            self.mode.load_bookmark_file()
-            mock_exit.assert_called_once_with(
-                f"Data specified in BOOKMARKS file has not the correct format."
-                f"Check that is has JSON format."
-            )
+         self.mode.load_bookmark_file(
+            Path(ROOT, "test", "testdata", "231030_Bookmarks")
+         )
+         mock_exit.assert_called_once_with(
+               f"Data specified in BOOKMARKS file has not the correct format."
+               f"Check that is has JSON format."
+         )
