@@ -13,6 +13,12 @@ class OverwriteMode(Mode):
     def process_bookmarks(self):
         """entry function when this mode is selected by user
         """
+        print(
+            "============\n"
+            "This mode is not fully implemented yet.\n"
+            "============\n"
+        )
+        return
         if not self.bookmarks_path_exists():
             Exc.exit(
                 f"Specified file {self.bookmarks_path} for overwriting browser "
