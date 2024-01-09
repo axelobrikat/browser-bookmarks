@@ -1,6 +1,7 @@
 from pathlib import Path
 from datetime import datetime
 import shutil
+import os
 
 from src.modes.mode import Mode
 from src.etc.exceptions import Exc
@@ -27,6 +28,8 @@ class BackupMode(Mode):
         """
         try:
             self.dest_name: str = f"{self.get_current_datetime()}_Backup_Bookmarks"
+            if not self.dest_path.exists():
+                os.mkdir(self.dest_path)
             shutil.copyfile(
                 BOOKMARKS,
                 self.dest_path / self.dest_name
